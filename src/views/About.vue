@@ -122,7 +122,9 @@ export default {
         // 设置默认时间
         getDates() {
             // 设置日期默认值
+            // 获取当日最开始的时间 00:00:00
             this.queryForm.createTimes.startTime = this.$moment().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+            // 获取当日结束的时间 23:59:59
             this.queryForm.createTimes.endTime = this.$moment().endOf('day').format('YYYY-MM-DD HH:mm:ss')
             this.startTimeChange(this.queryForm.createTimes.startTime)
             this.endTimeChange(this.queryForm.createTimes.endTime)
@@ -132,9 +134,9 @@ export default {
         startTimeChange(startTime, type) {
             this.endTimeOptions = {
                 disabledDate(endTime) {
-                    // 结束时间限制
+                    // 前两个控制结束时间限制  小于开始时间的disabled 大于当前时间的disabled
                     return endTime < new Date(startTime) || endTime > Date.now() || new Date(endTime).getTime() - new Date(startTime).getTime() > 4 * 24 * 60 * 60 * 1000 
-                    // 可选时间周期
+                    // 最后一个控制可选时间周期  5天内的
                 }
             }
         },
@@ -144,6 +146,7 @@ export default {
             this.startTimeOptions = {
                 disabledDate(startTime) {
                     // 开始时间限制
+                    // 大于结束日期的disabled  大于当前时间的disabled
                     return startTime > new Date(endTime) || startTime > Date.now() 
                 }
             }
